@@ -8,7 +8,7 @@ namespace Data
 {
     public class DInvoice
     {
-        public static string ConnectionString { get; set; } = "Data Source=LAB1504-23\\SQLEXPRESS;Initial Catalog=Neptuno;User ID=userTecsup;Password=123456";
+        public static string ConnectionString { get; set; } = "Data Source=SAMIR;Initial Catalog=tarea;User ID=userTecsup;Password=123456";
 
         public List<Invoice> Get()
         {
