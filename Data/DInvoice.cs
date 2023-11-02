@@ -34,7 +34,8 @@ namespace Data
                                     invoice_id = reader.GetInt32(reader.GetOrdinal("invoice_id")),
                                     customer_id = reader.GetInt32(reader.GetOrdinal("customer_id")),
                                     date = reader.GetDateTime(reader.GetOrdinal("date")),
-                                    total = reader.GetDecimal(reader.GetOrdinal("total"))
+                                    total = reader.GetDecimal(reader.GetOrdinal("total")),
+                                    active = true
                                 };
                                 detalles.Add(detalle);
                             }
@@ -44,6 +45,48 @@ namespace Data
             }
 
             return detalles;
+        }
+
+
+        public bool insert(Invoice invoice)
+        {
+
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand("InsertInvoice", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@customer_id", invoice.customer_id);
+                    command.Parameters.AddWithValue("@date", invoice.date);
+                    command.Parameters.AddWithValue("@total", invoice.total);
+                    command.Parameters.AddWithValue("@active", invoice.active);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+            return true;
+        }
+        public bool eliminar(int invoiceID)
+        {
+
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand("UpdateActiveStatus", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@RecordID", invoiceID);
+
+                    int rowsAffected = command.ExecuteNonQuery();
+
+
+                }
+            }
+            return true;
         }
 
     }
