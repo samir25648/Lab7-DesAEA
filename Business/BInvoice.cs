@@ -15,6 +15,14 @@ namespace Business
             return invoices;
         }
 
+        public List<Invoice> GetInvoiceActives()
+        {
+            DInvoice data = new DInvoice();
+            var invoices = data.Get();
+            var result = invoices.Where(x => x.active == true).ToList();
+            return result;
+        }
+
         public bool insert(Invoice invoice)
         {
             DInvoice insertar = new DInvoice();
