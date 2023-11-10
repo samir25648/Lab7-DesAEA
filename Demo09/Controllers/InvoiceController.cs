@@ -41,10 +41,21 @@ namespace Demo09.Controllers
         // POST: InvoiceController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(InvoiceModel model)
         {
             try
             {
+                BInvoice bInvoice=new BInvoice();
+
+                Invoice invoice = new Invoice
+                {
+                    customer_id = model.Customer_id,
+                    total = model.Total,
+                    date = DateTime.Now,
+                    active = true
+                };
+
+                bInvoice.insert(invoice);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -52,17 +63,22 @@ namespace Demo09.Controllers
                 return View();
             }
         }
+
+
 
         // GET: InvoiceController/Edit/5
         public ActionResult Edit(int id)
         {
+
             return View();
         }
+
+
 
         // POST: InvoiceController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, InvoiceModel model)
         {
             try
             {
@@ -74,19 +90,42 @@ namespace Demo09.Controllers
             }
         }
 
+
+
+
+
+
+
+
         // GET: InvoiceController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+
+            BInvoice bInvoice =new BInvoice();
+            Invoice invoice = bInvoice.GetInvoiceActives().Where(x=>x.invoice_id == id).FirstOrDefault();
+
+            InvoiceModel model = new InvoiceModel
+            {
+                Customer_id = invoice.customer_id,
+                Total = invoice.total,
+
+            };
+
+            //el modelo por id
+            return View(model);
         }
 
         // POST: InvoiceController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, InvoiceModel model)
         {
             try
             {
+                BInvoice bInvoice = new BInvoice();
+                bInvoice.DeleteRecord(id);
+
+
                 return RedirectToAction(nameof(Index));
             }
             catch
